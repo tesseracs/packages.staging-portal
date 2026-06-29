@@ -1,1 +1,1 @@
-export { StagingPortal, hasStagingAccess, readPreferredLanguageCode, writePreferredLanguageCode, type StagingPortalConfig, type StagingPortalProject, type StagingPortalTexts, type StagingPortalTheme, } from './StagingPortal';
+export { StagingPortal, hasStagingAccess, readPreferredLanguageCode, stagingPasswordSha256, stagingUsername, writePreferredLanguageCode, type StagingPortalConfig, type StagingPortalProject, type StagingPortalTexts, type StagingPortalTheme, } from './StagingPortal';

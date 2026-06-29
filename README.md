@@ -11,5 +11,10 @@ Tesseracs owns the generic staging logic:
 - local unlock/language persistence
 
 Child companies such as Memuli provide a small wrapper with brand text,
-password hash, product links, and versions.
+organization slug, stage-specific password hashes, product links, and versions.
 
+Credential rule:
+
+- username is derived from the organization slug, for example `memuli`
+- password is selected by stage, for example `staging`, `preview`, or `production-check`
+- plaintext passwords stay outside git; wrappers commit only SHA-256 hashes

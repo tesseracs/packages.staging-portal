@@ -43,8 +43,9 @@ export type StagingPortalTheme = {
 };
 export type StagingPortalConfig = {
     brand: string;
-    username: string;
-    passwordSha256: string;
+    organizationSlug: string;
+    stage: string;
+    passwordSha256ByStage: Record<string, string>;
     accessStorageKey: string;
     languageStorageKey: string;
     supportedLanguageCodes: readonly string[];
@@ -56,6 +57,8 @@ export type StagingPortalConfig = {
 export declare function StagingPortal({ config }: {
     config: StagingPortalConfig;
 }): import("react/jsx-runtime").JSX.Element;
+export declare function stagingUsername(config: Pick<StagingPortalConfig, 'organizationSlug'>): string;
+export declare function stagingPasswordSha256(config: Pick<StagingPortalConfig, 'passwordSha256ByStage' | 'stage'>): string;
 export declare function hasStagingAccess(config: StagingPortalConfig): boolean;
 export declare function readPreferredLanguageCode(config: StagingPortalConfig): string;
 export declare function writePreferredLanguageCode(config: StagingPortalConfig, languageCode: string): void;

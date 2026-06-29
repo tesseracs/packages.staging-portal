@@ -22,7 +22,7 @@ export function StagingPortal({ config }) {
     const [languageCode, setLanguageCode] = useState(() => readPreferredLanguageCode(config));
     const text = textsForLanguage(config, languageCode);
     const [accessGranted, setAccessGranted] = useState(() => readStagingAccess(config));
-    const [username, setUsername] = useState(config.username);
+    const [username, setUsername] = useState(stagingUsername(config));
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState(null);
     const [submitting, setSubmitting] = useState(false);
@@ -39,8 +39,8 @@ export function StagingPortal({ config }) {
             setSubmitting(false);
             return;
         }
-        const isUsernameValid = username.trim().toLowerCase() === config.username.trim().toLowerCase();
-        const isPasswordValid = passwordHash === config.passwordSha256;
+        const isUsernameValid = username.trim().toLowerCase() === stagingUsername(config);
+        const isPasswordValid = passwordHash === stagingPasswordSha256(config);
         if (!isUsernameValid || !isPasswordValid) {
             setMessage(text.wrongCredentials);
             setSubmitting(false);
@@ -81,6 +81,12 @@ function ProjectCard({ compact, onOpen, project, styles, text, }) {
 function VersionText({ build, styles, version, versionText, }) {
     const shortBuild = build.length > 12 ? build.slice(0, 12) : build;
     return _jsx(Text, { selectable: true, style: styles.versionText, children: versionText(version, shortBuild) });
+}
+export function stagingUsername(config) {
+    return config.organizationSlug.trim().toLowerCase();
+}
+export function stagingPasswordSha256(config) {
+    return config.passwordSha256ByStage[config.stage] || '';
 }
 export function hasStagingAccess(config) {
     return readStagingAccess(config);

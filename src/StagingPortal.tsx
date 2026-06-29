@@ -62,8 +62,9 @@ export type StagingPortalTheme = {
 
 export type StagingPortalConfig = {
   brand: string;
-  username: string;
-  passwordSha256: string;
+  organizationSlug: string;
+  stage: string;
+  passwordSha256ByStage: Record<string, string>;
   accessStorageKey: string;
   languageStorageKey: string;
   supportedLanguageCodes: readonly string[];
@@ -95,7 +96,7 @@ export function StagingPortal({ config }: { config: StagingPortalConfig }) {
   const [languageCode, setLanguageCode] = useState(() => readPreferredLanguageCode(config));
   const text = textsForLanguage(config, languageCode);
   const [accessGranted, setAccessGranted] = useState(() => readStagingAccess(config));
-  const [username, setUsername] = useState(config.username);
+  const [username, setUsername] = useState(stagingUsername(config));
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -113,8 +114,8 @@ export function StagingPortal({ config }: { config: StagingPortalConfig }) {
       return;
     }
 
-    const isUsernameValid = username.trim().toLowerCase() === config.username.trim().toLowerCase();
-    const isPasswordValid = passwordHash === config.passwordSha256;
+    const isUsernameValid = username.trim().toLowerCase() === stagingUsername(config);
+    const isPasswordValid = passwordHash === stagingPasswordSha256(config);
     if (!isUsernameValid || !isPasswordValid) {
       setMessage(text.wrongCredentials);
       setSubmitting(false);
@@ -283,6 +284,14 @@ function VersionText({
 }) {
   const shortBuild = build.length > 12 ? build.slice(0, 12) : build;
   return <Text selectable style={styles.versionText}>{versionText(version, shortBuild)}</Text>;
+}
+
+export function stagingUsername(config: Pick<StagingPortalConfig, 'organizationSlug'>) {
+  return config.organizationSlug.trim().toLowerCase();
+}
+
+export function stagingPasswordSha256(config: Pick<StagingPortalConfig, 'passwordSha256ByStage' | 'stage'>) {
+  return config.passwordSha256ByStage[config.stage] || '';
 }
 
 export function hasStagingAccess(config: StagingPortalConfig) {

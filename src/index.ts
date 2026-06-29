@@ -2,6 +2,8 @@ export {
   StagingPortal,
   hasStagingAccess,
   readPreferredLanguageCode,
+  stagingPasswordSha256,
+  stagingUsername,
   writePreferredLanguageCode,
   type StagingPortalConfig,
   type StagingPortalProject,
